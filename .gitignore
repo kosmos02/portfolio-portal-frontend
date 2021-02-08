@@ -3,7 +3,7 @@
 .DS_Store
 
 # pods
-./ios/Pods/
+./ios/Pods/*
 
 # Xcode
 #
