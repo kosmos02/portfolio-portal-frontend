@@ -69,23 +69,23 @@ export default class HelloWorldSceneAR extends Component {
     if (this.state.projectClick.name === 'project1' && this.state.portal1 === false) {
       this.setState({ portal1: true, portal2: false, portal3: false })
     }
-    else if (this.state.projectClick.name === 'project1' && this.state.portal1 === true) {
-      this.setState({portal1: false})
-    }
+    // else if (this.state.projectClick.name === 'project1' && this.state.portal1 === true) {
+    //   this.setState({portal1: false})
+    // }
 
     else if (this.state.projectClick.name === 'project2' && this.state.portal2 === false) {
       this.setState({ portal2: true, portal1: false, portal3: false })
     }
-    else if (this.state.projectClick.name === 'project2' && this.state.portal2 === true) {
-      this.setState({portal1: false})
-    }
+    // else if (this.state.projectClick.name === 'project2' && this.state.portal2 === true) {
+    //   this.setState({portal2: false})
+    // }
 
     else if (this.state.projectClick.name === 'project3' && this.state.portal3 === false) {
       this.setState({ portal3: true, portal2: false, portal1: false })
     }
-    else if (this.state.projectClick.name === 'project3' && this.state.portal3 === true) {
-      this.setState({portal3: false})
-    }
+    // else if (this.state.projectClick.name === 'project3' && this.state.portal3 === true) {
+    //   this.setState({portal3: false})
+    // }
   }
 
   renderProjectInfo() {
@@ -227,7 +227,7 @@ export default class HelloWorldSceneAR extends Component {
         <ViroText text={this.state.text} scale={[.5, .5, .5]} position={[0, 0, -1]} style={styles.helloWorldTextStyle} />
         <ViroARImageMarker target={"businessCard"} onAnchorFound={() => this.setState({runAnimation: true})}>
           {/* <ViroNode height={.06} width={0.9} opacity={0} position={[-.05, 0.2, 0]} animation={{name: 'uiAppear', run: this.state.runAnimation}}> */}
-            <ViroFlexView   dragType="FixedDistance" onDrag={() => { }} rotation={[0, 20, 0]} position={[-.05, 0.2, 0]} height={.06} width={.09} style={styles.contactInfo}>
+            <ViroFlexView dragType="FixedDistance" onDrag={() => { }} rotation={[0, 20, 0]} position={[-.05, 0.2, 0]} height={.06} width={.09} style={styles.contactInfo}>
                   <ViroText  textAlign='center' position={[.00, .01, 0]} scale={[0.04, 0.04, 0]} height={1} width={3} textClipMode="None" text="Alexander Gabriel" />
                   <ViroText  textAlign='center' position={[.00 , -.005, 0]} scale={[0.04, 0.04, 0]} height={1} width={3} textClipMode="None" text="Full Stack Developer" />
                   <ViroText  textAlign='center' position= {[.00, -.02, 0]} scale={[0.04, 0.04, 0]} height={1} width={3} textClipMode="None" text="719-244-4120" />
@@ -241,33 +241,67 @@ export default class HelloWorldSceneAR extends Component {
           {this.renderProjectInfo()}
           {this.renderPortal()}
 
-          <ViroNode position={[-.15, .06, 0]}>
+          {/* <ViroNode position={[-.15, .06, 0]}> */}
             <ViroAmbientLight color={"#aaaaaa"} />
             <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]}
               position={[0, 3, 1]} color="#ffffff" castsShadow={true} />
             
-            <ViroImage height={0.07} width={0.07} source={require('./res/images/globe-feather.png')} onClick={() => this.clickedProject(this.project1)} animation={{name: 'loopRotate', run: true, loop:true}} />
-          </ViroNode>
+            {/* <ViroImage height={0.07} width={0.07} source={require('./res/images/globe-feather.png')} onClick={() => this.clickedProject(this.project1)} animation={{name: 'loopRotate', run: true, loop:true}} /> */}
+          {/* </ViroNode> */}
+
+          <Viro3DObject
+            onClick={() => this.clickedProject(this.project1)}
+            source={require('./res/animations/emoji_smile/emoji_smile_anim_a.vrx')}
+            resources={[
+              require('./res/animations/emoji_smile/emoji_smile_specular.png'),
+              require('./res/animations/emoji_smile/emoji_smile_normal.png'),
+              require('./res/animations/emoji_smile/emoji_smile_diffuse.png'),
+            ]}
+            position={[-.15, .05, 0]}
+            scale={[.06, .06, .05]}
+            type="VRX"
+            animation={{
+              name: '02',
+              run: true,
+              loop: true,
+              delay: 1000
+            }}
+            />
 
           <Viro3DObject
             onClick={() => this.clickedProject(this.project2)}
-            source={require('./res/brain/Brain.obj')}
+            source={require('./res/animations/heart/emoji_heart_anim.vrx')}
             resources={[
-              require('./res/brain/BrainDif.jpg'),
+              require('./res/animations/heart/emoji_heart_specular.png'),
+              require('./res/animations/heart/emoji_heart.png'),
             ]}
             position={[0, .05, 0]}
-            scale={[.03, .03, .03]}
-            type="OBJ" />
+            scale={[.06, .06, .05]}
+            type="VRX"
+            animation={{
+              name: '02',
+              run: true,
+              loop: true,
+              delay: 1000
+            }}
+            />
 
           <Viro3DObject
             onClick={() => this.clickedProject(this.project3)}
-            source={require('./res/emoji_smile/emoji_smile.vrx')}
-            resources={[require('./res/emoji_smile/emoji_smile_diffuse.png'),
-            require('./res/emoji_smile/emoji_smile_normal.png'),
-            require('./res/emoji_smile/emoji_smile_specular.png')]}
+            source={require('./res/animations/star/object_star_anim.vrx')}
+            resources={[require('./res/animations/star/object_star_diffuse.png'),
+            require('./res/animations/star/object_star_specular.png')
+          ]}
             position={[.15, .05, 0]}
-            scale={[.05, .05, .05]}
-            type="VRX" />
+            scale={[.04, .04, .05]}
+            type="VRX" 
+            animation={{
+              name: '02',
+              run: true,
+              loop: true,
+              delay: 1000
+            }}
+            />
 
         </ViroARImageMarker>
       </ViroARScene>
@@ -329,7 +363,8 @@ ViroAnimations.registerAnimations({
     },
     easing: "Bounce",
     duration: 4000,
-  }
+  },
+  
 })
 
 module.exports = HelloWorldSceneAR;
