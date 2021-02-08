@@ -1,12 +1,16 @@
-/**
- * Copyright (c) 2017-present, Viro, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- */
 
+
+// 
+
+//  * Copyright (c) 2017-present, Viro, Inc.
+//  * All rights reserved.
+//  *
+//  * This source code is licensed under the BSD-style license found in the
+//  * LICENSE file in the root directory of this source tree. An additional grant
+//  * of patent rights can be found in the PATENTS file in the same directory.
+//  */
+
+// import 'react-native-gesture-handler';
 import React, { Component, Fragment } from 'react';
 import {
   AppRegistry,
@@ -21,12 +25,17 @@ import {
   ViroVRSceneNavigator,
   ViroARSceneNavigator
 } from 'react-viro';
+import { NavigationContainer } from '@react-navigation/native';
+import  { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import HomeScreen from './screen/HomeScreen'
+
+const Tab = createBottomTabNavigator();
 
 /*
  TODO: Insert your API key below
  */
 var sharedProps = {
-  apiKey:"API_KEY_HERE",
+  apiKey: "API_KEY_HERE",
 }
 
 // Sets the default scene you want for AR and VR
@@ -46,8 +55,8 @@ export default class ViroSample extends Component {
     super();
 
     this.state = {
-      navigatorType : defaultNavigatorType,
-      sharedProps : sharedProps
+      navigatorType: defaultNavigatorType,
+      sharedProps: sharedProps
     }
     this._getExperienceSelector = this._getExperienceSelector.bind(this);
     this._getARNavigator = this._getARNavigator.bind(this);
@@ -71,23 +80,30 @@ export default class ViroSample extends Component {
   // Presents the user with a choice of an AR or VR experience
   _getExperienceSelector() {
     return (
-      <View style={localStyles.outer} >
-        <View style={localStyles.inner} >
+      <NavigationContainer>
+        <Tab.Navigator>
+          <Tab.Screen name="HOME" component={HomeScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+        <View style={localStyles.outer} >
+          <View style={localStyles.inner} >
 
-          <Text style={localStyles.titleText}>
-            Try out your Portfolio!
+            <Text style={localStyles.titleText}>
+              Try out your Portfolio!
           </Text>
 
-          <TouchableHighlight style={localStyles.buttons}
-            onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
-            underlayColor={'#68a0ff'} >
+            <TouchableHighlight style={localStyles.buttons}
+              onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
+              underlayColor={'#68a0ff'} >
 
-            <Text style={localStyles.buttonText}>AR</Text>
-          </TouchableHighlight>
+              <Text style={localStyles.buttonText}>AR</Text>
+            </TouchableHighlight>
 
-          
+
+          </View>
         </View>
-      </View>
+      
+
     );
   }
 
@@ -95,23 +111,23 @@ export default class ViroSample extends Component {
   _getARNavigator() {
     return (
       <Fragment>
-        <View style={{position: "absolute", left: 0, right: 0, top: 0, bottom: 0, width: "100%", height:"100%"}}>
+        <View style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0, width: "100%", height: "100%" }}>
           <ViroARSceneNavigator {...this.state.sharedProps}
-            initialScene={{scene: InitialARScene}}
+            initialScene={{ scene: InitialARScene }}
             numberOfTrackedImages={1} />
         </View>
       </Fragment>
-      
+
     );
   }
-  
+
   // Returns the ViroSceneNavigator which will start the VR experience
   _getVRNavigator() {
     return (
-      
-        <ViroVRSceneNavigator {...this.state.sharedProps}
-          initialScene={{scene: InitialVRScene}} onExitViro={this._exitViro}/>
-      
+
+      <ViroVRSceneNavigator {...this.state.sharedProps}
+        initialScene={{ scene: InitialVRScene }} onExitViro={this._exitViro} />
+
     );
   }
 
@@ -120,7 +136,7 @@ export default class ViroSample extends Component {
   _getExperienceButtonOnPress(navigatorType) {
     return () => {
       this.setState({
-        navigatorType : navigatorType
+        navigatorType: navigatorType
       })
     }
   }
@@ -128,60 +144,60 @@ export default class ViroSample extends Component {
   // This function "exits" Viro by setting the navigatorType to UNSET.
   _exitViro() {
     this.setState({
-      navigatorType : UNSET
+      navigatorType: UNSET
     })
   }
 }
 
 var localStyles = StyleSheet.create({
-  viroContainer :{
-    flex : 1,
+  viroContainer: {
+    flex: 1,
     backgroundColor: "black",
   },
-  outer : {
-    flex : 1,
+  outer: {
+    flex: 1,
     flexDirection: 'row',
-    alignItems:'center',
+    alignItems: 'center',
     backgroundColor: "black",
   },
   inner: {
-    flex : 1,
+    flex: 1,
     flexDirection: 'column',
-    alignItems:'center',
+    alignItems: 'center',
     backgroundColor: "black",
   },
   titleText: {
     paddingTop: 30,
     paddingBottom: 20,
-    color:'#fff',
-    textAlign:'center',
-    fontSize : 25
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 25
   },
   buttonText: {
-    color:'#fff',
-    textAlign:'center',
-    fontSize : 20
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 20
   },
-  buttons : {
+  buttons: {
     height: 80,
     width: 150,
-    paddingTop:20,
-    paddingBottom:20,
+    paddingTop: 20,
+    paddingBottom: 20,
     marginTop: 10,
     marginBottom: 10,
-    backgroundColor:'#68a0cf',
+    backgroundColor: '#68a0cf',
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#fff',
   },
-  exitButton : {
+  exitButton: {
     height: 50,
     width: 100,
-    paddingTop:10,
-    paddingBottom:10,
+    paddingTop: 10,
+    paddingBottom: 10,
     marginTop: 10,
     marginBottom: 10,
-    backgroundColor:'#68a0cf',
+    backgroundColor: '#68a0cf',
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#fff',
