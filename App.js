@@ -19,17 +19,18 @@ import {
   StyleSheet,
   PixelRatio,
   TouchableHighlight,
+  Image,
+  StatusBar,
+  ImageBackground,
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 
 import {
-  ViroVRSceneNavigator,
   ViroARSceneNavigator
 } from 'react-viro';
-import { NavigationContainer } from '@react-navigation/native';
-import  { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import HomeScreen from './screen/HomeScreen'
-
-const Tab = createBottomTabNavigator();
+import LoginScreen from './screens/LoginScreen';
+import Login from './screens/LoginScreen'
 
 /*
  TODO: Insert your API key below
@@ -40,10 +41,8 @@ var sharedProps = {
 
 // Sets the default scene you want for AR and VR
 var InitialARScene = require('./js/HelloWorldSceneAR');
-var InitialVRScene = require('./js/HelloWorldScene');
 
 var UNSET = "UNSET";
-var VR_NAVIGATOR_TYPE = "VR";
 var AR_NAVIGATOR_TYPE = "AR";
 
 // This determines which type of experience to launch in, or UNSET, if the user should
@@ -56,54 +55,70 @@ export default class ViroSample extends Component {
 
     this.state = {
       navigatorType: defaultNavigatorType,
-      sharedProps: sharedProps
+      sharedProps: sharedProps,
+      loginPage: true,
+      buildPage: false,
     }
     this._getExperienceSelector = this._getExperienceSelector.bind(this);
     this._getARNavigator = this._getARNavigator.bind(this);
-    this._getVRNavigator = this._getVRNavigator.bind(this);
     this._getExperienceButtonOnPress = this._getExperienceButtonOnPress.bind(this);
     this._exitViro = this._exitViro.bind(this);
+    this._loginScreen = this._loginScreen.bind(this);
+    this._userSignedIn = this._userSignedIn.bind(this)
   }
 
   // Replace this function with the contents of _getVRNavigator() or _getARNavigator()
   // if you are building a specific type of experience.
   render() {
-    if (this.state.navigatorType == UNSET) {
+    if (this.state.loginPage === false && this.state.navigatorType == UNSET) {
       return this._getExperienceSelector();
-    } else if (this.state.navigatorType == VR_NAVIGATOR_TYPE) {
-      return this._getVRNavigator();
-    } else if (this.state.navigatorType == AR_NAVIGATOR_TYPE) {
+    } 
+    else if (this.state.loginPage === true){
+      return this._loginScreen();
+    }
+    else if (this.state.navigatorType == AR_NAVIGATOR_TYPE) {
       return this._getARNavigator();
     }
   }
 
   // Presents the user with a choice of an AR or VR experience
+  _loginScreen(){
+    return(
+      <LoginScreen 
+        outer={localStyles.outer} 
+        inner={localStyles.inner} 
+        titleText={localStyles.titleText} 
+        _userSignedIn={this._userSignedIn}
+        />
+    
+      )
+  }
+
+  _userSignedIn(){
+    return this.setState({ loginPage: false})
+  }
+
+
   _getExperienceSelector() {
     return (
-      <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="HOME" component={HomeScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
-        <View style={localStyles.outer} >
-          <View style={localStyles.inner} >
-
-            <Text style={localStyles.titleText}>
-              Try out your Portfolio!
+      <View style={localStyles.outer} >
+        <View style={localStyles.inner} >
+          <Text style={localStyles.titleText}>Portfolio Portal</Text>
+          <Text style={localStyles.titleText}>Click on Build Portfolio to add a new portfolio. Click AR to view your portfolio in Augmented Reality.</Text>
+          <TouchableHighlight style={localStyles.buttons} 
+            underlayColor={'#68a0ff'} >
+            <Text style={localStyles.buttonText}>Build portfolio</Text>
+          </TouchableHighlight>
+          <Text style={localStyles.titleText}>
+            Try out your Portfolio!
           </Text>
-
-            <TouchableHighlight style={localStyles.buttons}
-              onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
-              underlayColor={'#68a0ff'} >
-
-              <Text style={localStyles.buttonText}>AR</Text>
-            </TouchableHighlight>
-
-
-          </View>
+          <TouchableHighlight style={localStyles.buttons}
+            onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
+            underlayColor={'#68a0ff'} >
+            <Text style={localStyles.buttonText}>AR</Text>
+          </TouchableHighlight>
         </View>
-      
-
+      </View>
     );
   }
 
@@ -117,23 +132,13 @@ export default class ViroSample extends Component {
             numberOfTrackedImages={1} />
         </View>
       </Fragment>
-
-    );
-  }
-
-  // Returns the ViroSceneNavigator which will start the VR experience
-  _getVRNavigator() {
-    return (
-
-      <ViroVRSceneNavigator {...this.state.sharedProps}
-        initialScene={{ scene: InitialVRScene }} onExitViro={this._exitViro} />
-
     );
   }
 
   // This function returns an anonymous/lambda function to be used
   // by the experience selector buttons
   _getExperienceButtonOnPress(navigatorType) {
+    console.warn(this.state.navigatorType)
     return () => {
       this.setState({
         navigatorType: navigatorType

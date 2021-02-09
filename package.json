@@ -5,12 +5,14 @@
   "scripts": {
     "prestart": "./node_modules/react-viro/bin/run_ngrok.sh",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "post-install": "jetifier -r"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.7",
     "@react-navigation/native": "^5.9.2",
+    "@react-navigation/stack": "^5.14.2",
     "link": "^0.1.5",
     "react": "16.8.3",
     "react-native": "^0.59.9",
