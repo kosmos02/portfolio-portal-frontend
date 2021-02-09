@@ -26,10 +26,11 @@ import {
   ViroARSceneNavigator
 } from 'react-viro';
 import { NavigationContainer } from '@react-navigation/native';
-import  { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import HomeScreen from './screen/HomeScreen'
+// import  { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+// import { createStackNavigator } from '@react-navigation/stack'
+// import HomeScreen from './screens/HomeScreen'
 
-const Tab = createBottomTabNavigator();
+// const Stack = createStackNavigator();
 
 /*
  TODO: Insert your API key below
@@ -80,12 +81,13 @@ export default class ViroSample extends Component {
   // Presents the user with a choice of an AR or VR experience
   _getExperienceSelector() {
     return (
-      <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="HOME" component={HomeScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
-        <View style={localStyles.outer} >
+     
+      // <NavigationContainer>
+      //   <Stack.Navigator>
+      //     <Stack.Screen name="Home" component={HomeScreen}/>
+      //   </Stack.Navigator>
+      // </NavigationContainer>
+         <View style={localStyles.outer} >
           <View style={localStyles.inner} >
 
             <Text style={localStyles.titleText}>
@@ -101,7 +103,8 @@ export default class ViroSample extends Component {
 
 
           </View>
-        </View>
+        </View> 
+    
       
 
     );
