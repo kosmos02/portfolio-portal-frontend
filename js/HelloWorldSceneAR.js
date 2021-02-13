@@ -27,6 +27,7 @@ import {
   ViroVideo,
   ViroButton,
   ViroAnimations,
+  Viro360Video,
 } from 'react-viro';
 
 export default class HelloWorldSceneAR extends Component {
@@ -39,8 +40,11 @@ export default class HelloWorldSceneAR extends Component {
     this.state = {
       text: "Initializing AR...",
       projectClick: "",
-      project1Text: "WanderLust - Ruby on Rails, RESTful methods, Javascript, Google Maps API - User can select a location on the map to mark. They can post notes about this location and other users can post comments as well.",
-      project2Text: "TrivAbility - Ruby on Rails, React, OPen DB Trivia API - A two player trivia game where the objective is to get to the end gameboard space. Correct answers move the player further.",
+
+      project1Text: {name: "project1", projectName: "WanderLust", tech: "Ruby on Rails, RESTful methods, Javascript, Google Maps API", description: "User can select a location on the map to mark. They can post notes about this location and other users can post comments as well."},
+      project2Text: {name: "project2", projectName: "TrivAbility", tech: "Ruby on Rails, React, Open DB Trivia API", description: "A two player trivia game where the objective is to get to the end gameboard space. Correct answers move the player further."},
+      project3Text: project3= {name: "project3", projectName: "ZodiHack", tech: "Ruby on Rails, Javascript, Aztro API", description: "Aesthetically appeasing horoscope app. User can select their zodiac and view their horoscope for yesterday, today, and tomorrow."},
+      
       portal1: false,
       portal2: false,
       portal3: false,
@@ -49,11 +53,11 @@ export default class HelloWorldSceneAR extends Component {
       videoIndex: 0,
 
       runAnimation: false,
+      scale: [.05, .05, .1]
     };
 
     // bind 'this' to functions
     this._onInitialized = this._onInitialized.bind(this);
-    // this.project1Click = this.project1Click.bind(this)
   }
 
   clickedProject(project) {
@@ -97,7 +101,6 @@ export default class HelloWorldSceneAR extends Component {
             <ViroText scale={[0.04, 0.04, 0]} position={[-.01, 0.01, 0]} textClipMode="None" width={4} height={1} text={this.state.projectClick.tech} textAlign='left' />
             <ViroText scale={[0.04, 0.04, 0]} position={[-.01, -.025, 0]} textClipMode="None" width={4} height={1} text={this.state.projectClick.description} textAlign='left' />
           </ViroFlexView>
-
           <ViroFlexView dragType="FixedDistance" onClick={() => this.clickedDemo()} rotation={[0, -20, 0]} position={[.12, .12, 0]} height={.03} width={.05} style={styles.contactInfo}>
             <ViroText scale={[0.04, 0.04, 0]} position={[0.07, -0.013, 0]} textClipMode="ClipToBounds" width={4} height={1} text="DEMO" textAlign='left' />
           </ViroFlexView>
@@ -105,6 +108,21 @@ export default class HelloWorldSceneAR extends Component {
       )
     }
   }
+
+  // _setARNodeRef(component) {
+  //   this.arNodeRef = component;
+// }
+
+  // _onPinch(pinchState, scaleFactor, source) {
+  //   var newScale = this.state.scale.map((x)=>{return x * scaleFactor})
+
+  //   if (pinchState == 3) {
+  //     this.setState({
+  //       scale : newScale
+  //     });
+  //     this.arNodeRef.setNativeProps({scale: newScale});
+  //   }
+  // }
 
   renderPortal() {
     if (this.state.portal1 === true) {
@@ -147,7 +165,7 @@ export default class HelloWorldSceneAR extends Component {
               paused={this.state.videoPaused}
           />
           {this.renderVideoControls()}
-          <Viro360Image source={require("./ARPortals/portal_res/stage.jpg")} />
+          <Viro360Image source={require("./ARPortals/portal_res/kyoto_large.jpg")} />
         </ViroPortalScene>
       )
     }
@@ -169,7 +187,7 @@ export default class HelloWorldSceneAR extends Component {
               paused={this.state.videoPaused}
           />
           {this.renderVideoControls()}
-          <Viro360Image source={require("./ARPortals/portal_res/nightsky.jpg")} />
+          <Viro360Video source={require("./ARPortals/portal_res/Doi_Suthep.mp4")} loop={true} muted={true} />
         </ViroPortalScene>
       )
     }
@@ -224,6 +242,8 @@ export default class HelloWorldSceneAR extends Component {
   render() {
     return (
       <ViroARScene onTrackingUpdated={this._onInitialized} >
+        
+      
         <ViroText text={this.state.text} scale={[.5, .5, .5]} position={[0, 0, -1]} style={styles.helloWorldTextStyle} />
         <ViroARImageMarker target={"businessCard"} onAnchorFound={() => this.setState({runAnimation: true})}>
           {/* <ViroNode height={.06} width={0.9} opacity={0} position={[-.05, 0.2, 0]} animation={{name: 'uiAppear', run: this.state.runAnimation}}> */}
@@ -234,9 +254,6 @@ export default class HelloWorldSceneAR extends Component {
                   <ViroText  textAlign='center' position= {[.00, -.03, 0]} scale={[0.04, 0.04, 0]} height={1} width={3} textClipMode="None" text="alexandrgabe@gmail.com" />
               </ViroFlexView >
             {/* </ViroNode> */}
-            
-          
-          
 
           {this.renderProjectInfo()}
           {this.renderPortal()}
@@ -344,7 +361,8 @@ var styles = StyleSheet.create({
   },
   project1: {
     backgroundColor: 'lightyellow'
-  }
+  },
+  
 });
 
 ViroARTrackingTargets.createTargets({
