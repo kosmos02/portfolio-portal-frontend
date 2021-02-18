@@ -31,12 +31,15 @@ import {
 import {
   ViroARSceneNavigator
 } from 'react-viro';
+
 import SignUpScreen from './screens/SignUpScreen';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 // import AsyncStorage from '@react-native-community/async-storage';
 import { HOST_WITH_PORT } from './environment'
 import BuildScreen from './screens/BuildScreen';
+
+
 
 /*
  TODO: Insert your API key below
@@ -219,6 +222,7 @@ export default class ViroSample extends Component {
 
   _signUpScreen() {
     return (
+
       <SignUpScreen
         outer={localStyles.outer}
         inner={localStyles.inner}
@@ -230,6 +234,10 @@ export default class ViroSample extends Component {
       />
     )
   }
+
+     
+     
+
 
   _userSignedIn(user) {
     this.setState({spinner: true})
@@ -263,6 +271,7 @@ export default class ViroSample extends Component {
   _goToBuildScreen(){
     this.setState({buildPage: !this.state.buildPage})
   }
+
 
   _buildPortfolio () {
     fetch(`${baseUrl}/portfolios`, {
@@ -311,6 +320,8 @@ export default class ViroSample extends Component {
       _goToBuildScreen={this._goToBuildScreen}
       _buildPortfolio={this._buildPortfolio}
       _buildProjects={this._buildProjects}
+ 
+
       
     />
     )

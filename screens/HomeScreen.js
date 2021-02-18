@@ -27,6 +27,7 @@ export default function HomeScreen(props) {
     var AR_NAVIGATOR_TYPE = "AR";
 
     return (
+
         <ImageBackground source={image1} style={localStyles.backImage} imageStyle={{ opacity: 0.7 }} >
             <View style={localStyles.outer} >
                 <View style={localStyles.inner} >
@@ -61,6 +62,7 @@ export default function HomeScreen(props) {
                 </View>
             </View>
         </ImageBackground>
+
     )
 }
 

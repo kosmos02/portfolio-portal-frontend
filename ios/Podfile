@@ -3,6 +3,7 @@ target 'Portfolio' do
   use_frameworks!
   pod 'ViroReact', :path => '../node_modules/react-viro/ios/'
   pod 'ViroKit', :path => '../node_modules/react-viro/ios/dist/ViroRenderer/'
+
   pod 'RNCMaskedView', :path => '../node_modules/@react-native-community/masked-view'
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
@@ -12,5 +13,6 @@ target 'Portfolio' do
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
 
   pod 'RNScreens', :path => '../node_modules/react-native-screens'
+
 
 end
