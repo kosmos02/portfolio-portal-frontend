@@ -5,9 +5,11 @@
   "scripts": {
     "prestart": "./node_modules/react-viro/bin/run_ngrok.sh",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "post-install": "jetifier -r"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.7",
     "@react-navigation/native": "^5.9.2",
@@ -31,5 +33,10 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "./js/res/fonts/"
+    ]
   }
 }
