@@ -12,6 +12,7 @@ import {
     TouchableOpacity,
     ScrollView,
     Animated,
+    
 } from 'react-native';
 
 const image1 = { uri: "https://i.ibb.co/Yb7FVFh/forest.jpg" }
@@ -36,14 +37,16 @@ export default function HomeScreen(props) {
                         </View>
                         <View style={localStyles.inner}>
                             <View style={[{ marginTop: 35 }, localStyles.inner]}>
-                                <Text style={localStyles.titleText}>Click on 'Build Portfolio' to add a new portfolio.</Text>
+                                
                                 <TouchableHighlight style={localStyles.buttons}
-                                    underlayColor={'#68a0ff'} >
+                                    underlayColor={'#68a0ff'}
+                                    onPress={() => props._goToBuildScreen()} 
+                                    >
                                     <Text style={localStyles.buttonText}>Build portfolio</Text>
                                 </TouchableHighlight>
                             </View>
                             <View style={[{ marginTop: 30 }, localStyles.inner]}>
-                                <Text style={localStyles.titleText}>
+                                <Text style={[localStyles.titleText, {fontSize: 25}]}>
                                     Try out your Portfolio!
                                 </Text>
                                 <TouchableHighlight style={localStyles.buttons}
@@ -51,7 +54,7 @@ export default function HomeScreen(props) {
                                     underlayColor={'#68a0ff'} >
                                     <Text style={localStyles.buttonText}>AR</Text>
                                 </TouchableHighlight>
-                                <Text onPress={() => props._logout()} style={[localStyles.titleText, { textDecorationLine: 'underline', top: 40 },]}>Logout</Text>
+                                <Text onPress={() => props._logout()} style={[localStyles.titleText, { textDecorationLine: 'underline', top: 80 },]}>Logout</Text>
                             </View>
                         </View>
                     </ScrollView>
@@ -80,17 +83,23 @@ const localStyles = StyleSheet.create({
         paddingBottom: 20,
         color: '#fff',
         textAlign: 'center',
-        fontSize: 20
+        fontSize: 20,
+        textShadowOffset: { width: 2, height: 2 },
+        textShadowRadius: 1,
+        textShadowColor: '#000',
     },
     titleImage: {
-        marginTop: 70,
+        marginTop: 110,
         height: 30,
         width: 325
     },
     buttonText: {
         color: '#fff',
         textAlign: 'center',
-        fontSize: 20
+        fontSize: 20,
+        textShadowOffset: { width: 2, height: 2 },
+        textShadowRadius: 1,
+        textShadowColor: '#000',
     },
     buttons: {
         height: 80,

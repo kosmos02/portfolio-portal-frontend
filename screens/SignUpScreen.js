@@ -11,6 +11,7 @@ import {
     TouchableHighlight,
     ScrollView,
     Image,
+    ActivityIndicator,
 } from 'react-native'
 
 export default function SignUpScreen(props) {
@@ -31,52 +32,58 @@ export default function SignUpScreen(props) {
 
     return (
         <ImageBackground source={image1} style={localStyles.backImage} imageStyle={{ opacity: 0.7 }} >
-            
-                <TouchableOpacity
-                    style={{top: 10}}
-                    activeOpacity={.5}
-                    onPress={() => props._toggleSignUp()}
-                >
-                    <Image
-                        style={localStyles.topMenu}
-                        source={require('../js/res/images/icon_left_w.png')}
-                    />
-                </TouchableOpacity>
-            
-            <View style={props.outer}>
-                <View style={[props.inner, {bottom: 100}]}>
-
-                    <Text style={[props.titleText, {bottom: 50}]}>Portfolio Portal</Text>
-                    <View style={localStyles.formBox}>
-                        <TextInput style={localStyles.textInput} name="username" value={username} placeholder="Username" placeholderTextColor={'#D6D29D'} onChangeText={text => setUsername(text)} />
-                    </View>
-                    <View style={localStyles.formBox}>
-                        <TextInput style={localStyles.textInput} name="password" value={password} secureTextEntry={true} placeholder="Password" placeholderTextColor={'#D6D29D'} onChangeText={text => setPassword(text)} />
-                    </View>
-                    <View style={localStyles.formBox}>
-                        <TextInput style={localStyles.textInput} name="name" value={name} placeholder="Name" placeholderTextColor={'#D6D29D'} onChangeText={text => setName(text)} />
-                    </View>
-                    <View style={localStyles.formBox}>
-                        <TextInput style={localStyles.textInput} name="title" value={title} placeholder="Title" placeholderTextColor={'#D6D29D'} onChangeText={text => setTitle(text)} />
-                    </View>
-                    <View style={localStyles.formBox}>
-                        <TextInput style={localStyles.textInput} name="phoneNumber" value={phoneNumber} placeholder="Phone Number" placeholderTextColor={'#D6D29D'} onChangeText={text => setPhoneNumber(text)} />
-                    </View>
-                    <View style={localStyles.formBox}>
-                        <TextInput style={localStyles.textInput} name="email" value={email} placeholder="Email" placeholderTextColor={'#D6D29D'} onChangeText={text => setEmail(text)} />
-                    </View>
-                    {props.error ? <Text style={localStyles.errorText}>{props.error}</Text> : null}
-                    <TouchableHighlight
-                        style={[localStyles.buttons, {top: 40}]}
-                        onPress={() => handleSubmit({ username: username, password: password, name: name, title: title, phone_number: phoneNumber, email: email })}
-                        underlayColor={'#68a0ff'}
+            {props.spinner === false ?
+                <>
+                    <TouchableOpacity
+                        style={{ top: 10 }}
+                        activeOpacity={.5}
+                        onPress={() => props._toggleSignUp()}
                     >
-                        <Text style={localStyles.buttonText}>
-                            Sign Up
+                        <Image
+                            style={localStyles.topMenu}
+                            source={require('../js/res/images/icon_left_w.png')}
+                        />
+                    </TouchableOpacity>
+
+                    <View style={props.outer}>
+                        <View style={[props.inner, { bottom: 100 }]}>
+
+                            <Text style={[localStyles.titleText, { bottom: 50, fontSize: 30 }]}>Portfolio Portal</Text>
+                            <View style={localStyles.formBox}>
+                                <TextInput style={localStyles.textInput} name="username" value={username} placeholder="Username" placeholderTextColor={'#F8F5E8'} onChangeText={text => setUsername(text)} />
+                            </View>
+                            <View style={localStyles.formBox}>
+                                <TextInput style={localStyles.textInput} name="password" value={password} secureTextEntry={true} placeholder="Password" placeholderTextColor={'#F8F5E8'} onChangeText={text => setPassword(text)} />
+                            </View>
+                            <View style={localStyles.formBox}>
+                                <TextInput style={localStyles.textInput} name="name" value={name} placeholder="Name" placeholderTextColor={'#F8F5E8'} onChangeText={text => setName(text)} />
+                            </View>
+                            <View style={localStyles.formBox}>
+                                <TextInput style={localStyles.textInput} name="title" value={title} placeholder="Title" placeholderTextColor={'#F8F5E8'} onChangeText={text => setTitle(text)} />
+                            </View>
+                            <View style={localStyles.formBox}>
+                                <TextInput style={localStyles.textInput} name="phoneNumber" value={phoneNumber} placeholder="Phone Number" placeholderTextColor={'#F8F5E8'} onChangeText={text => setPhoneNumber(text)} />
+                            </View>
+                            <View style={localStyles.formBox}>
+                                <TextInput style={localStyles.textInput} name="email" value={email} placeholder="Email" placeholderTextColor={'#F8F5E8'} onChangeText={text => setEmail(text)} />
+                            </View>
+                            {props.error ? <Text style={localStyles.errorText}>{props.error}</Text> : null}
+                            <TouchableHighlight
+                                style={[localStyles.buttons, { top: 40 }]}
+                                onPress={() => handleSubmit({ username: username, password: password, name: name, title: title, phone_number: phoneNumber, email: email })}
+                                underlayColor={'#68a0ff'}
+                            >
+                                <Text style={localStyles.buttonText}>
+                                    Sign Up
                         </Text>
-                    </TouchableHighlight>
-                </View>
-            </View>
+                            </TouchableHighlight>
+
+                        </View>
+                    </View>
+                </> :
+                <ActivityIndicator size='large' color='#D6D29D' />
+            }
+
         </ImageBackground>
     )
 }
@@ -115,6 +122,9 @@ const localStyles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         fontSize: 20,
+        textShadowOffset: { width: 2, height: 2 },
+        textShadowRadius: 1,
+        textShadowColor: '#000',
     },
     backImage: {
         flex: 1,
@@ -128,4 +138,14 @@ const localStyles = StyleSheet.create({
         marginTop: 0,
         top: 40,
     },
+    titleText: {
+        paddingTop: 30,
+        paddingBottom: 20,
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 20,
+        textShadowOffset: { width: 2, height: 2 },
+        textShadowRadius: 1,
+        textShadowColor: '#000',
+    }
 })

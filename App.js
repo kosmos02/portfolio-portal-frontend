@@ -25,6 +25,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Animated,
+  LogBox,
 } from 'react-native';
 
 import {
@@ -35,6 +36,7 @@ import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 // import AsyncStorage from '@react-native-community/async-storage';
 import { HOST_WITH_PORT } from './environment'
+import BuildScreen from './screens/BuildScreen';
 
 /*
  TODO: Insert your API key below
@@ -58,6 +60,8 @@ const image1 = { uri: "https://i.ibb.co/Yb7FVFh/forest.jpg" }
 // const baseUrl = 'http://10.0.0.11:3000/'
 const baseUrl = 'https://portfolio-portal-ar.herokuapp.com'
 
+console.disableYellowBox = true
+
 export default class ViroSample extends Component {
   constructor() {
     super();
@@ -70,6 +74,11 @@ export default class ViroSample extends Component {
       spinAnim: new Animated.Value(0),
       user: {},
       error: "",
+      viroAppProps: {user: {}},
+      spinner: false,
+      hasPortfolio: false,
+      portfolio: {},
+      projects: [],
 
     }
 
@@ -83,6 +92,10 @@ export default class ViroSample extends Component {
     this._userSignedIn = this._userSignedIn.bind(this)
     this._toggleSignUp = this._toggleSignUp.bind(this)
     this._logout = this._logout.bind(this)
+    this._goToBuildScreen = this._goToBuildScreen.bind(this)
+    this._buildScreen = this._buildScreen.bind(this)
+    this._buildPortfolio = this._buildPortfolio.bind(this)
+    this._buildProjects = this._buildProjects.bind(this)
   }
 
   componentDidMount() {
@@ -94,6 +107,18 @@ export default class ViroSample extends Component {
         useNativeDriver: true
       }
     )).start()
+  }
+
+  // componentDidUpdate() {
+  //   Animated.loop(Animated.timing(
+  //     this.state.spinAnim,
+  //     {
+  //       toValue: 1,
+  //       duration: 16500,
+  //       useNativeDriver: true
+  //     }
+  //   )).start()
+  // }
 
     // let token = localStorage.getItem('token')
     //   if(token){
@@ -112,16 +137,20 @@ export default class ViroSample extends Component {
     //       }
     //     })
     //   }
-  }
+  
 
   // Replace this function with the contents of _getVRNavigator() or _getARNavigator()
   // if you are building a specific type of experience.
   render() {
     if (this.state.user.username && this.state.navigatorType == UNSET) {
-      return this._getExperienceSelector();
+      if (this.state.buildPage === false){
+        return this._getExperienceSelector();
+      }
+      else if (this.state.buildPage === true) {
+        return this._buildScreen();
+      }
     }
     else if (!this.state.user.username) {
-      // return this._signUpScreen();
       if (this.state.signUpPage === false) {
         return this._loginScreen();
       }
@@ -129,6 +158,7 @@ export default class ViroSample extends Component {
         return this._signUpScreen();
       }
     }
+    
     else if (this.state.navigatorType == AR_NAVIGATOR_TYPE) {
       return this._getARNavigator();
     }
@@ -148,11 +178,14 @@ export default class ViroSample extends Component {
         inner={localStyles.inner}
         titleText={localStyles.titleText}
         _toggleSignUp={this._toggleSignUp}
+        spinner={this.state.spinner}
+        
       />
     )
   }
 
   _userLoggedIn(username, password) {
+    this.setState({spinner: true})
     fetch(`${baseUrl}/login`, {
       method: "POST",
       headers: {
@@ -167,15 +200,16 @@ export default class ViroSample extends Component {
     })
       .then(response => response.json())
       .then(result => {
+        
         if (result.token) {
           // localStorage.setItem('token', result.token)
           this.setState({
-            user: result.user
+            user: result.user, viroAppProps: {user: result.user, spinner: false}
           })
         }
         else {
           this.setState({
-            error: result.error
+            error: result.error, spinner: false
           })
         }
       })
@@ -192,11 +226,13 @@ export default class ViroSample extends Component {
         _userSignedIn={this._userSignedIn}
         error={this.state.error}
         _toggleSignUp={this._toggleSignUp}
+        spinner={this.state.spinner}
       />
     )
   }
 
   _userSignedIn(user) {
+    this.setState({spinner: true})
     fetch(`${baseUrl}/users`, {
       method: "POST",
       headers: {
@@ -206,21 +242,88 @@ export default class ViroSample extends Component {
       body: JSON.stringify({ user })
     })
       .then(response => response.json())
-      .then(user => this.setState({ user: user }))
+      .then(user => {
+        this.setState({ user: user, viroAppProps: {user: user}, spinner: false })
+        
+        if (user.portfolios){
+          this.setState({portfolio: user.portfolios})
+        }
+        if (user.portfolios.projects){
+          this.setState({projects: user.portfolios.projects})
+        }
+      })
 
     // this.setState({ user: user }
   }
 
   _logout() {
-    this.setState({ user: {} })
+    this.setState({ user: {}, spinner: false })
+  }
+
+  _goToBuildScreen(){
+    this.setState({buildPage: !this.state.buildPage})
+  }
+
+  _buildPortfolio () {
+    fetch(`${baseUrl}/portfolios`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({user_id: this.state.user.id})
+    })
+    .then(response => response.json())
+    .then(portfolio => {
+      console.warn("PORTFOLIO",portfolio)
+      this.setState({portfolios: portfolio})})
+
+}
+
+  _buildProjects (project_name, tech, description){
+    fetch(`${baseUrl}/projects`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        portfolio_id: this.state.portfolio.id,
+        project_name,
+        tech,
+        description,
+
+      })
+    })
+    .then(response => response.json())
+    .then(project => {
+      this.setState({projects: [...this.state.projects, project]
+    })
+  })
+}
+  
+  
+
+  _buildScreen(){
+    return(
+      <BuildScreen
+      outer={localStyles.outer}
+      inner={localStyles.inner}
+      titleText={localStyles.titleText}
+      _goToBuildScreen={this._goToBuildScreen}
+      _buildPortfolio={this._buildPortfolio}
+      _buildProjects={this._buildProjects}
+      
+    />
+    )
   }
 
   _getExperienceSelector() {
+    
     return (
       <HomeScreen
         _getExperienceButtonOnPress={this._getExperienceButtonOnPress}
         spinAnim={this.state.spinAnim}
         _logout={this._logout}
+        _goToBuildScreen={this._goToBuildScreen}
       />
     )
   }
@@ -234,6 +337,7 @@ export default class ViroSample extends Component {
             initialScene={{ scene: InitialARScene }}
             numberOfTrackedImages={1}
             _exitViro={this._exitViro}
+            viroAppProps={this.state.viroAppProps}
           />
           <View style={localStyles.topMenu}>
             <TouchableOpacity style={{flex: 1}} activeOpacity={.5} onPress={() => this._exitViro()}>
